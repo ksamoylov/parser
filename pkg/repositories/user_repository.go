@@ -3,7 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"fmt"
-	"parsing/pkg/models"
+	"parser/pkg/models"
 )
 
 func CreateUsers(users models.Users, db *sql.DB) {

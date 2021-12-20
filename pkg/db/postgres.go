@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
-	"parsing/pkg/config"
+	"parser/pkg/config"
 )
 
 type Postgres struct {

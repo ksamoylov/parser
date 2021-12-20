@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"github.com/joho/godotenv"
 	"log"
-	"parsing/pkg/config"
-	"parsing/pkg/db"
-	"parsing/pkg/models"
-	"parsing/pkg/parser"
-	"parsing/pkg/repositories"
+	"parser/pkg/config"
+	"parser/pkg/db"
+	"parser/pkg/models"
+	"parser/pkg/parser"
+	"parser/pkg/repositories"
 )
 
 func init() {
