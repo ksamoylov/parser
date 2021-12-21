@@ -32,9 +32,11 @@ func main() {
 
 	data := parser.Parse("users.json")
 
-	var users models.Users
+	var users []models.User
 
 	json.Unmarshal([]byte(data), &users)
 
-	repositories.CreateUsers(users, db)
+	userRepository := repositories.UserRepository{DB: db}
+
+	userRepository.CreateMany(users)
 }
