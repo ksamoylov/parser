@@ -1,14 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/joho/godotenv"
 	"log"
 	"parser/pkg/config"
 	"parser/pkg/db"
-	"parser/pkg/models"
 	"parser/pkg/parser"
-	"parser/pkg/repositories"
 )
 
 func init() {
@@ -30,13 +27,18 @@ func main() {
 		return
 	}
 
-	data := parser.Parse("users.json")
+	stream := parser.Init()
 
-	var users []models.User
+	go func() {
+		for data := range stream.Watch() {
 
-	json.Unmarshal([]byte(data), &users)
+			if data.Error != nil {
+				panic(data.Error)
+			}
 
-	userRepository := repositories.UserRepository{DB: db}
+			log.Println(data.User.ID, ":", data.User.Name)
+		}
+	}()
 
-	userRepository.CreateMany(users)
+	stream.Start("users.json", db)
 }

@@ -12,11 +12,11 @@ type UserRepository struct {
 
 func (repository *UserRepository) CreateMany(users []models.User) {
 	for _, user := range users {
-		repository.createOne(&user)
+		repository.CreateOne(&user)
 	}
 }
 
-func (repository *UserRepository) createOne(user *models.User) {
+func (repository *UserRepository) CreateOne(user *models.User) {
 	sqlStatement := `INSERT INTO users (username, name, email) VALUES ($1, $2, $3) RETURNING id`
 	id := 0
 	err := repository.DB.QueryRow(sqlStatement, user.Username, user.Name, user.Email).Scan(&id)
@@ -25,5 +25,5 @@ func (repository *UserRepository) createOne(user *models.User) {
 		panic(err)
 	}
 
-	fmt.Println("Id: ", id)
+	fmt.Println(fmt.Sprintf("User %d created", user.ID))
 }
