@@ -24,7 +24,7 @@ func main() {
 	defer db.Close()
 
 	if err != nil {
-		return
+		panic(err)
 	}
 
 	stream := parser.Init()
