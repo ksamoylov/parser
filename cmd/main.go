@@ -3,9 +3,12 @@ package main
 import (
 	"github.com/joho/godotenv"
 	"log"
-	"parser/pkg/config"
-	"parser/pkg/db"
-	"parser/pkg/parser"
+	"parser/config"
+	"parser/internal/app/db"
+	"parser/internal/app/models"
+	"parser/internal/app/reader"
+	"parser/internal/app/repositories"
+	"parser/internal/app/services"
 )
 
 func init() {
@@ -15,8 +18,7 @@ func init() {
 }
 
 func main() {
-	conf := config.New()
-
+	conf := config.NewConfig()
 	postgres := db.Postgres{DbConfig: conf.DbConfig}
 
 	db, err := postgres.Connect()
@@ -27,18 +29,13 @@ func main() {
 		panic(err)
 	}
 
-	stream := parser.Init()
+	userRepository := repositories.NewUserRepository(db)
+	userService := services.NewUserService(userRepository)
+	fileReader := reader.NewFileReader("users.json")
 
-	go func() {
-		for data := range stream.Watch() {
+	dataCh := make(chan models.User)
 
-			if data.Error != nil {
-				panic(data.Error)
-			}
+	go fileReader.Read(dataCh)
 
-			log.Println(data.User.ID, ":", data.User.Name)
-		}
-	}()
-
-	stream.Start("users.json", db)
+	userService.Handle(dataCh)
 }

@@ -3,16 +3,16 @@ package repositories
 import (
 	"database/sql"
 	"fmt"
-	"parser/pkg/models"
+	"parser/internal/app/models"
 )
 
 type UserRepository struct {
 	DB *sql.DB
 }
 
-func (repository *UserRepository) CreateMany(users []models.User) {
-	for _, user := range users {
-		repository.CreateOne(&user)
+func NewUserRepository(db *sql.DB) *UserRepository {
+	return &UserRepository{
+		DB: db,
 	}
 }
 
@@ -25,5 +25,5 @@ func (repository *UserRepository) CreateOne(user *models.User) {
 		panic(err)
 	}
 
-	fmt.Println(fmt.Sprintf("User %d created", user.ID))
+	fmt.Println(fmt.Sprintf("User %d created", id))
 }

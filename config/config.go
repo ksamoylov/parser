@@ -22,7 +22,7 @@ type DbConfig struct {
 	Name string
 }
 
-func getDbConfig() *DbConfig {
+func NewDbConfig() *DbConfig {
 	return &DbConfig{
 		Url:  getEnv("DB_URL", ""),
 		Host: getEnv("DB_HOST", ""),
@@ -33,9 +33,9 @@ func getDbConfig() *DbConfig {
 	}
 }
 
-func New() *Config {
+func NewConfig() *Config {
 	return &Config{
-		DbConfig: getDbConfig(),
+		DbConfig: NewDbConfig(),
 	}
 }
 
